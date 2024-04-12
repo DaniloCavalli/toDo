@@ -1,5 +1,7 @@
 import { Todo } from "../model/todo.model";
-import { signalStore, withState } from '@ngrx/signals';
+import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
+import { TodosService } from "../service/todos.service";
+import { inject } from "@angular/core";
 
 
 export type TodosFilter = 'all' | 'pending' | 'completed';
@@ -19,7 +21,24 @@ const initialState: TodosState = {
 
 export const TodosStore = signalStore(
     {providedIn: 'root'},
-    withState(initialState)
+    withState(initialState),
+    withMethods(
+        (store, todosService = inject(TodosService)) => ({
+
+            async loadAll(){
+                // metto il loading a true
+                patchState(store, {loading: true});
+                // prendo la lista
+                const todos = await todosService.getTodos();
+                // aggiorno lo store con la lista e spengo il loader
+                patchState(store, {todos, loading: false})
+
+            }
+
+
+
+        })
+    )
 )
 
 
