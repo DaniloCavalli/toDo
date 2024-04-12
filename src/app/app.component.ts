@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { TodosStore } from './store/todos.store';
 
 @Component({
   selector: 'app-root',
@@ -9,5 +10,11 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'toDoListApp';
+
+  store = inject(TodosStore);
+
+  constructor(){
+    this.store.todos()
+  }
+
 }
