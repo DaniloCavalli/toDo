@@ -26,4 +26,18 @@ export class TodoListComponent {
 
   store = inject(TodosStore);
 
+  async onAddTodo(title: string){
+    await this.store.addTodo(title);
+  }
+
+  async onDeleteTodo(id: string, event: MouseEvent){
+    // evita che il click si propaghi agli altri elemnti html (checkbox)
+    event.stopPropagation();
+    await this.store.deleteTodo(id);
+  }
+
+  async onToggleTodo(id: string, completed: boolean){
+    
+  }
+
 }

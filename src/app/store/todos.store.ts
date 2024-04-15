@@ -26,7 +26,7 @@ export const TodosStore = signalStore(
         (store, todosService = inject(TodosService)) => ({
 
             async loadAll(){
-                // metto il loading a true
+                // metto il loading a true con un partial dello stato iniziale modificato
                 patchState(store, {loading: true});
                 // prendo la lista
                 const todos = await todosService.getTodos();
@@ -38,11 +38,36 @@ export const TodosStore = signalStore(
 
                 const todo = await todosService.addTodo({title, completed: false})
                  
-
+                // aggiorno lo store con una state update function che prende come argomento "state" lo stato corrente dello store
                 patchState( store, (state) => ({
+                    // ritorna un partial dello state corrente di todos (...state.todos) e aggiunge il todo all array 
                     todos: [...state.todos, todo]
                 }) )
 
+            },
+
+            async deleteTodo(id: string){
+                const todos = await todosService.deleteTodo(id);
+
+                patchState( store, (state) => ({
+                    // filtro la lista dei todos correnti e la ritorno senza il todo con l'id ricevuto in ingresso
+                    todos: state.todos.filter( todo => todo.id !== id )
+                }) )
+            },
+
+            async updateTodo(id: string, completed: boolean){
+                // 1. chiamo il servizio
+                await todosService.updateTodo(id, completed);
+                // 2. aggiorno il current state dello store
+                patchState(store, (state) => ({
+                    // mappa i todo allo stato corrente
+                    todos: state.todos.map( todo =>
+                        //per ogni todo verificha l'id con quello in ingresso, 
+                        //se corrisponde aggiorna lo stato 
+                        //completed del todo altrimenti ritorna il todo cosi come è
+                        todo.id == id ? { ...todo, completed } : todo 
+                     )
+                }))
             }
 
 
