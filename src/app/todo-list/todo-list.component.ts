@@ -6,6 +6,7 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatListModule} from '@angular/material/list';
 import { TodosStore } from '../store/todos.store';
 import {MatIconModule} from '@angular/material/icon';
+import { NgStyle } from '@angular/common';
 
 
 @Component({
@@ -17,7 +18,8 @@ import {MatIconModule} from '@angular/material/icon';
     MatFormFieldModule,
     MatButtonToggleModule,
     MatListModule,
-    MatIconModule
+    MatIconModule,
+    NgStyle
   ],
   templateUrl: './todo-list.component.html',
   styleUrl: './todo-list.component.scss'
@@ -37,7 +39,7 @@ export class TodoListComponent {
   }
 
   async onToggleTodo(id: string, completed: boolean){
-    
+    await this.store.updateTodo(id, completed);
   }
 
 }

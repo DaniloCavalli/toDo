@@ -27,7 +27,9 @@
                     class="delete-todo"
                     (click)="onDeleteTodo(todo.id, $event)"
                     >delete</mat-icon>
-                    <span>{{ todo.title }}</span>
+                    <span
+                    [ngStyle]="{ 'text-decoration': todo.completed ? 'line-through' : 'none' }"
+                    >{{ todo.title }}</span>
                 </div>
     
             </mat-list-option>
