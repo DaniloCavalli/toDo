@@ -8,7 +8,9 @@
 </div>
 
 <div>
-    <mat-button-toggle-group #filter>
+    <mat-button-toggle-group 
+    #filter
+    (change)="onFilterTodos($event)">
         <mat-button-toggle value="all">All</mat-button-toggle>
         <mat-button-toggle value="pending">Pending</mat-button-toggle>
         <mat-button-toggle value="completed">Completed</mat-button-toggle>
@@ -17,7 +19,7 @@
 
 <div>
     <mat-selection-list class="todo-list">
-        @for ( todo of store.todos(); track todo.id; let index = $index  ) {
+        @for ( todo of store.filteredTodos(); track todo.id; let index = $index  ) {
             <mat-list-option 
             [selected]="todo.completed"
             (selectedChange)="onToggleTodo(todo.id, $event)">

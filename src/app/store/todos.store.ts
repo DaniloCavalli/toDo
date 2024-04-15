@@ -1,7 +1,7 @@
 import { Todo } from "../model/todo.model";
-import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
+import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { TodosService } from "../service/todos.service";
-import { inject } from "@angular/core";
+import { computed, inject } from "@angular/core";
 
 
 export type TodosFilter = 'all' | 'pending' | 'completed';
@@ -15,7 +15,7 @@ type TodosState = {
 const initialState: TodosState = {
     todos: [],
     loading: false,
-    filter: 'all'
+    filter: 'pending'
 }
 
 
@@ -68,12 +68,35 @@ export const TodosStore = signalStore(
                         todo.id == id ? { ...todo, completed } : todo 
                      )
                 }))
+            },
+
+            updateFilter( filter: TodosFilter ){
+                patchState( store, {filter} )
             }
 
 
 
         })
-    )
+    ),
+    //derived signals, prendo il current state e ritorno un oggetto
+    withComputed( (state) => ({
+        // proprietà filteredTodos come derived signal (computed signal)
+        filteredTodos: computed( () => {
+            // prendo i todos allo stato corrente
+            const todos = state.todos();
+            // filtro i todos per valore filter corrente e li ritorno
+            switch(state.filter()){
+                case 'all':
+                    return todos;
+                    case 'pending':
+                        return todos.filter( todo => !todo.completed )
+                        case 'completed':
+                            return todos.filter( todo => todo.completed )
+            }
+
+        })
+
+    }))
 )
 
 
