@@ -3,10 +3,16 @@
 
   {{ store.todos() | json }}
 
-  <div class="main">
-    <todo-list />
+  @if( !store.loading() ) {
+    <div class="main">
+      <todo-list />
+  
+    </div>
+  }
+  @else {
+    <mat-spinner />
+  }
 
-  </div>
 
 
 

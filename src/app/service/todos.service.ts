@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { TODOS } from "../model/mock-data";
+import { Todo } from "../model/todo.model";
 
 @Injectable({providedIn: 'root'})
 export class TodosService {
@@ -8,6 +9,16 @@ export class TodosService {
         await sleep(1000);
         return TODOS;
     }
+
+
+    async addTodo(todo: Partial<Todo>):Promise<Todo> {
+        await sleep(1000);
+        return {
+            id: Math.random().toString(36),
+            ...todo
+        } as Todo;
+    }
+
 }
 
 async function sleep(ms: number){
@@ -15,3 +26,4 @@ async function sleep(ms: number){
         return setTimeout(resolve, ms);
     })
 }
+

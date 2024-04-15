@@ -32,6 +32,16 @@ export const TodosStore = signalStore(
                 const todos = await todosService.getTodos();
                 // aggiorno lo store con la lista e spengo il loader
                 patchState(store, {todos, loading: false})
+            },
+
+            async addTodo(title: string){
+
+                const todo = await todosService.addTodo({title, completed: false})
+                 
+
+                patchState( store, (state) => ({
+                    todos: [...state.todos, todo]
+                }) )
 
             }
 
